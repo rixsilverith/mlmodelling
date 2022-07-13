@@ -23,6 +23,30 @@ $ python3 setup.py install
 
 > **Note** You may need to run the `setup.py` file with root priviledges.
 
+### Requirements
+
+*mlmodels* depends on the following packages:
+
+- [numpy](https://numpy.org/) - Efficient numerical computing library for Python.
+- [matplotlib](https://matplotlib.org/) - Plotting library for Python
+
+---
+
+## Some examples
+
+### Logistic Regression model
+
+```bash
+$ python3 examples/logistic_regression.py
+```
+This example generates a dataset suited for binary classification, fits a logistic regression model
+using the Stochastic Gradient Descent optimizer to the generated data and plots the decision boundary
+for the problem.
+
+![logistic-regression-example](imgs/logistic_regression_example.png)
+
+---
+
 ## List of implemented models
 
 The following is a list of the currently implemented models.

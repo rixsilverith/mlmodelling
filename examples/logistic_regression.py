@@ -6,14 +6,18 @@ from sklearn.datasets import make_classification
 
 from mlmodels.linear_models import LogisticRegressionClassifier
 from mlmodels.loss_functions import BinaryCrossEntropy
+from mlmodels.optimizers import StochasticGradientDescent
 
 def main():
     X, y = make_classification(n_classes=2, n_features=2, n_informative=2, 
-                               n_redundant=0, n_samples=300, random_state=66)
+                               n_redundant=0, n_samples=300, random_state=78)
+    # random_state = 69, 71, 74 are also good datasets
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+    # here we set random_state=1 to ensure reproducibility
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
 
-    model = LogisticRegressionClassifier(learning_rate=0.01).fit(X_train, y_train)
+    sgd_optimizer = StochasticGradientDescent(learning_rate=0.01, momentum=0.1)
+    model = LogisticRegressionClassifier(optimizer=sgd_optimizer).fit(X_train, y_train)
     pred_v = model.predict(X_test)
     bce = BinaryCrossEntropy()(y_test, pred_v)
 
@@ -38,8 +42,9 @@ def main():
     plt.title('Binary Cross-Entropy error: %.2f' % bce, fontsize=10)
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
-    plt.legend(loc='upper left')
-    plt.show()
+    plt.legend(loc='lower left')
+    plt.show() 
+    plt.savefig('logistic_regression_example.png')
 
 if __name__ == "__main__":
     main()
