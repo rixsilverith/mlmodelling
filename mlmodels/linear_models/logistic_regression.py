@@ -34,9 +34,12 @@ class LogisticRegressionClassifier(object):
 
         return self
 
-    def predict(self, X):
+    def predict_prob(self, X):
         X = np.insert(X, 0, 1, axis=1)
         return Sigmoid(X.dot(self.coefficients))
+
+    def predict(self, X):
+        return np.round(self.predict_prob(X))
 
 class GDLogisticRegressionClassifier(object):
     """A logistic regression classifier.
