@@ -1,8 +1,7 @@
-"""Optimizers Module
+"""Optimizers module
 
 This module contains the implementation of several gradient-based optimization
 algorithms used to train the models.
-
 """
 
 import numpy as np
@@ -58,5 +57,3 @@ class StochasticGradientDescent(GradientBasedOptimizer):
         self.delta_w = self.momentum * self.delta_w - self.learning_rate * grad_w
         return w + self.delta_w
         
-        self.delta_w = self.momentum * self.delta_w + (1 - self.momentum) * grad_w
-        return w - self.learning_rate * self.delta_w
