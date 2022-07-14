@@ -43,7 +43,7 @@ This example generates a dataset suited for binary classification, fits a logist
 using the Stochastic Gradient Descent optimizer to the generated data and plots the decision boundary
 for the problem.
 
-![logistic-regression-example](imgs/logistic_regression_example.png)
+<p><img src="imgs/logistic_regression_example.png" width="540"\></p>
 
 ---
 
