@@ -2,21 +2,23 @@
 
 This module contains the implementation of several gradient-based optimization
 algorithms used to train the models.
+
+References:
+    Ruder, S. "An overview of gradient descent optimisation algorithms". 
+        (2016): arXiv preprint arXiv:1609.04747.
 """
 
 import numpy as np
 from abc import ABC, abstractmethod
 
 class GradientBasedOptimizer(ABC):
+    """Base class for an optimization algorithm based on gradient descent."""
     def __init__(self, learning_rate):
         pass
 
-class StandardGradientDescent(GradientBasedOptimizer):
-    def __init__(self, learning_rate=0.1):
-        self.learning_rate = learning_rate
-
-    def update(self, w, grad_w):
-        return w - self.learning_rate * grad_w
+    @abstractmethod
+    def update(self, w: np.ndarray, grad_w: np.ndarray) -> np.ndarray:
+        pass
 
 class StochasticGradientDescent(GradientBasedOptimizer):
     """Stochastic Gradient Descent (SGD) algorithm with momentum.
@@ -25,7 +27,7 @@ class StochasticGradientDescent(GradientBasedOptimizer):
     work just like the standard batch Gradient Descent algorithm.
     """
 
-    def __init__(self, learning_rate=0.01, momentum=0):
+    def __init__(self, learning_rate=0.01, momentum=0.0, nesterov=False):
         """Constructor for StochasticGradientDescent class.
 
         Initializes an instance of this class with the given parameters.
@@ -33,14 +35,17 @@ class StochasticGradientDescent(GradientBasedOptimizer):
         Args:
             learning_rate (float, default=0.01): learning rate (step size) to be used at 
                 each iteration of the algorithm.
-            momentum (float, default=0): decay factor by which the correction term for the 
+            momentum (float, default=0.0): decay factor by which the correction term for the 
                 negative gradient direction is applied.
+            nesterov (boolean, default=False): whether to apply Nesterov momentum. See 
+                Sutskever et al., 2013.
         """
         self.learning_rate = learning_rate
         self.momentum = momentum
+        self.nesterov = nesterov
         self.delta_w = None
 
-    def update(self, w, grad_w):
+    def update(self, w: np.ndarray, grad_w: np.ndarray) -> np.ndarray:
         """Update rule used to optimize the given parameter vector.
 
         Args:
@@ -50,10 +55,17 @@ class StochasticGradientDescent(GradientBasedOptimizer):
 
         Returns:
             numpy array of shape (1,n) containing the n updated model parameters.
+
+        References:
+            Sutskever, I. "Training Recurrent neural Networks". PhD Thesis. (2013). 
         """
         if self.delta_w is None:
             self.delta_w = np.zeros(np.shape(w))
 
         self.delta_w = self.momentum * self.delta_w - self.learning_rate * grad_w
+
+        if self.nesterov:
+            return w + self.momentum * self.delta_w - self.learning_rate * grad_w
+
         return w + self.delta_w
         

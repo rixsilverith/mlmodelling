@@ -13,7 +13,7 @@ the internals and working principles of the algorithms available in well known f
 
 ## Installation
 
-The `mlmodels` package can be installed by running the following sequence of commands.
+The *mlmodels* package can be installed by running the following sequence of commands.
 
 ```bash
 $ git clone https://github.com/rixsilverith/machine-learning-models
@@ -63,3 +63,9 @@ Logistic Regression | [`LogisticRegressionClassifier`](mlmodels/linear_models/lo
 
 The MIT License. See [LICENSE](LICENSE) for more information.
 
+---
+
+## References
+
+- Ruder, S. "An overview of gradient descent optimisation algorithms". (2016). [arxiv.org/pdf/1609.04747.pdf](https://arxiv.org/pdf/1609.04747.pdf).
+- Sutskever, I. "Training Recurrent neural Networks". PhD Thesis. (2013). [[pdf]](https://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf)
