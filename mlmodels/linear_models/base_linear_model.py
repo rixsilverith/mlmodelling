@@ -7,6 +7,7 @@ the linear regression model and its variants, as well as logistic regression.
 import math
 from abc import ABC
 import numpy as np
+from terminaltables import AsciiTable
 
 from mlmodels import BaseModel
 from mlmodels.optimizers import GradientBasedOptimizer
@@ -71,9 +72,8 @@ class LinearModel(ABC):
         return type(self).__name__
 
     def summary(self):
-        print(f"{self.name} model")
-        print('-------------------------------------')
+        print(AsciiTable([[f'{self.name}']]).table)
         print('phi (activation):', self.phi.name)
         print('optimizer:', self.optimizer.name)
         print('loss:', self.loss.name)
-        print('regularizer', self.regularizer.name)
+        print('regularizer:', self.regularizer.name)
