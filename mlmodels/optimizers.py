@@ -18,6 +18,10 @@ class GradientBasedOptimizer(ABC):
     def update(self, w: np.ndarray, grad_w: np.ndarray) -> np.ndarray:
         pass
 
+    @property
+    def name(self):
+        return type(self).__name__
+
 class StochasticGradientDescent(GradientBasedOptimizer):
     """Stochastic Gradient Descent (SGD) algorithm with momentum.
 
@@ -38,7 +42,6 @@ class StochasticGradientDescent(GradientBasedOptimizer):
             nesterov (boolean, default=False): whether to apply Nesterov momentum. See
                 Sutskever et al., 2013.
         """
-        self.name = 'StochasticGradientDescent'
         self.learning_rate = learning_rate
         self.momentum = momentum
         self.nesterov = nesterov

@@ -14,14 +14,15 @@ class Activation(ABC):
     def gradient(self, x):
         pass
 
+    @property
+    def name(self):
+        return type(self).__name__
+
 class Softmax(Activation):
     """Softmax activation function. 
 
     Softmax converts a vector of values to a probability distribution.
     """
-
-    def __init__(self):
-        self.name = 'Softmax'
 
     def __call__(self, x):
         """Convert a 
@@ -42,9 +43,6 @@ class Softmax(Activation):
 class Sigmoid(Activation):
     """Sigmoid (or logistic) activation function."""
 
-    def __init__(self):
-        self.name = 'Sigmoid'
-
     def __call__(self, x):
         return 1 / (1 + np.exp(-x))
 
@@ -53,9 +51,6 @@ class Sigmoid(Activation):
 
 class Identity(Activation):
     """Identity function."""
-
-    def __init__(self):
-        self.name = 'Identity'
 
     def __call__(self, x):
         return x

@@ -65,3 +65,15 @@ class LinearModel(ABC):
 
         X = np.insert(X, 0, 1, axis=1)
         return self.phi(X.dot(self.coefficients))
+
+    @property
+    def name(self):
+        return type(self).__name__
+
+    def summary(self):
+        print(f"{self.name} model")
+        print('-------------------------------------')
+        print('phi (activation):', self.phi.name)
+        print('optimizer:', self.optimizer.name)
+        print('loss:', self.loss.name)
+        print('regularizer', self.regularizer.name)

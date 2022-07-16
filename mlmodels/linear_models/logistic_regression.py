@@ -41,13 +41,6 @@ class LogisticRegressionClassifier(LinearModel):
     def predict(self, X):
         return np.round(self.predict_prob(X))
 
-    def summary(self):
-        print('LogisticRegressionClasifier model')
-        print('phi (activation):', self.phi.name)
-        print('optimizer:', self.optimizer.name)
-        print('loss:', self.loss.name)
-        print('regularizer', self.regularizer.name)
-
 class OldLogisticRegressionClassifier():
     """A logistic regression classifier.
 

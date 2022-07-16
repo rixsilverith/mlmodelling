@@ -18,14 +18,15 @@ class Loss(ABC):
     def gradient(self, y_pred, y_true):
         pass
 
+    @property
+    def name(self):
+        return type(self).__name__
+
 class CategorialCrossentropy(Loss):
     """Categorical cross-entropy loss function.
 
     Mainly used as loss function in classification problems.
     """
-
-    def __init__(self):
-        self.name = 'CategoricalCrossentropy'
 
     def __call__(self, y_pred, y_true, from_logits=False):
         """Compute the categorical cross-entropy between the predicted label vector `y_pred`
@@ -37,15 +38,12 @@ class CategorialCrossentropy(Loss):
 
         return - np.sum(y_true * np.log(y_pred))
 
-class BinaryCrossentropy():
+class BinaryCrossentropy(Loss):
     """Binary cross-entropy loss function.
 
     It is used in the logistic regression model. It can be derived using the maximum
     likelihood estimation method.
     """
-
-    def __init__(self):
-        self.name = 'BinaryCrossentropy'
 
     def __call__(self, y_pred, y_true):
         """Compute the binary cross-entropy loss between `y_pred` and `y_true`.
@@ -63,6 +61,9 @@ class BinaryCrossentropy():
 
         y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
         return np.mean(- y_true * np.log(y_pred) - (1 - y_true) * np.log(1 - y_pred))
+
+    def gradient(self, theta, grad_theta):
+        pass
 
 class BinaryCrossEntropy():
     """Categorical binary cross-entropy loss function.

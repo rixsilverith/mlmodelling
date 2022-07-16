@@ -24,9 +24,3 @@ class LinearRegressor(LinearModel):
         super(LinearRegressor, self).__init__( 
             phi=Identity(), optimizer=optimizer, loss=BinaryCrossentropy(), regularizer=regularization)
 
-    def summary(self):
-        print('LinearRegressor model')
-        print('phi (activation):', self.phi.name)
-        print('optimizer:', self.optimizer.name)
-        print('loss:', self.loss.name)
-        print('regularizer', self.regularizer.name)
