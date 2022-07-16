@@ -69,3 +69,7 @@ class StochasticGradientDescent(GradientBasedOptimizer):
         if self.nesterov:
             return w + self.momentum * self.delta_w - self.learning_rate * grad_w
         return w + self.delta_w
+
+    @property
+    def config(self):
+        return f"learning_rate: {self.learning_rate}, momentum: {self.momentum}, nesterov: {self.nesterov}"

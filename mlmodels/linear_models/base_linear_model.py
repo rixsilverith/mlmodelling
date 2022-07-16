@@ -75,5 +75,6 @@ class LinearModel(ABC):
         print(AsciiTable([[f'{self.name}']]).table)
         print('phi (activation):', self.phi.name)
         print('optimizer:', self.optimizer.name)
+        print(' └──', self.optimizer.config)
         print('loss:', self.loss.name)
         print('regularizer:', self.regularizer.name)
