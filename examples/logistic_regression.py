@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 
 from mlmodels.linear_models import LogisticRegressionClassifier
-from mlmodels.loss_functions import BinaryCrossEntropy
 from mlmodels.optimizers import StochasticGradientDescent
 from mlmodels.utils import accuracy_score
 
