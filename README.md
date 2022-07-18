@@ -39,9 +39,21 @@ $ python3 setup.py install
 ```bash
 $ python3 examples/logistic_regression.py
 ```
-This example generates a dataset suited for binary classification, fits a logistic regression model
-using the Stochastic Gradient Descent optimizer to the generated data and plots the decision boundary
-for the problem.
+This example generates a synthetic dataset suited for binary classification, fits a logistic regression model
+using the Stochastic Gradient Descent optimizer according to the generated data and plots the estimated decision 
+boundary for the problem.
+
+```
++------------------------------+
+| LogisticRegressionClassifier |
++------------------------------+
+phi (activation): Sigmoid
+optimizer: StochasticGradientDescent
+ └── learning_rate: 0.01, momentum: 0.0, nesterov: False
+loss: BinaryCrossEntropy
+regularizer: L2Ridge
+ └── alpha: 0.01
+```
 
 <p><img src="imgs/logistic_regression_example.png" width="540"\></p>
 
@@ -53,19 +65,25 @@ The following is a list of the currently implemented models.
 
 ### Linear models
 
-**Model name** | **Implementation** | **Used for**
+**Model** | **Implementation** | **Used for**
 --- | --- | --- 
 Logistic Regression | [`LogisticRegressionClassifier`](mlmodels/linear_models/logistic_regression.py) | Binary classification
+Linear Regression | [`LinearRegressor`](mlmodels/linear_models/regression.py) | Regression
+Lasso (L1) Regression | [`LassoRegressor`](mlmodels/linear_models/regression.py) | Regression
+Ridge (L2) Regression | [`RidgeRegressor`](mlmodels/linear_models/regression.py) | Regression
 
 ---
 
 ## License
 
-The MIT License. See [LICENSE](LICENSE) for more information.
+*mlmodels* is licensed under the MIT License. See [LICENSE](LICENSE) for more information. 
+A copy of the license can be found along with the code.
 
 ---
 
 ## References
 
 - Ruder, S. "An overview of gradient descent optimisation algorithms". (2016). [arxiv.org/pdf/1609.04747.pdf](https://arxiv.org/pdf/1609.04747.pdf).
+- Sutskever, I. et al. "On the importance of initialization and momentum in deep learning". ICML-13. Vol 28. (2013): pp. 1139-1147. 
+[[pdf]](https://www.cs.utoronto.ca/~ilya/pubs/2013/1051_2.pdf)
 - Sutskever, I. "Training Recurrent neural Networks". PhD Thesis. (2013). [[pdf]](https://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf)
