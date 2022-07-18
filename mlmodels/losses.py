@@ -22,11 +22,43 @@ class Loss(ABC):
     def name(self) -> str:
         return type(self).__name__
 
+class SquareLoss(Loss):
+    """Square loss function."""
+
+    def __call__(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
+        """Compute the square loss between the predicted response vector `y_pred` and the true 
+        response vector `y_true`.
+
+        Args:
+            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+
+        Returns:
+            np.ndarray (m,): vector containing the square loss between each `y_pred` and `y_true`.
+        """
+
+        return 0.5 * np.power((y_pred - y_true), 2)
+
+    def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
+        """Compute the gradient of the square loss between the predicted response vector `y_pred` 
+        and the true response vector `y_true`.
+
+        Args:
+            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+
+        Returns:
+            np.ndarray (m,): vector containing the gradients of the  square loss between each 
+            `y_pred` and `y_true`.
+        """
+
+        return - (y_pred - y_true)
+
 class BinaryCrossEntropy(Loss):
     """Binary cross-entropy loss function.
 
-    It is used in the logistic regression model. It can be derived using the maximum
-    likelihood estimation method.
+    The binary cross-entropy loss function is mainly used in binary classification problems.
+    It can be derived via maximum likelihood estimation.
     """
 
     def __call__(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
@@ -35,8 +67,8 @@ class BinaryCrossEntropy(Loss):
         Clips each value in the given prediction vector to avoid division by 0.
 
         Args:
-            y_pred (np.ndarray (m,)): numpy array containing m predicted values by a model.
-            y_true (np.ndarray (m,)): numpy array containg m actual values from the dataset.
+            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
 
         Returns:
             np.ndarray (m,): binary cross-entropy loss between each `y_pred` and `y_true`.
@@ -47,8 +79,20 @@ class BinaryCrossEntropy(Loss):
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
         """Compute the gradient of the binary cross-entropy loss between `y_pred` and `y_true`.
+
+        Clips each value in the given prediction vector to avoid division by 0.
+
+        Args:
+            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+
+        Returns:
+            np.ndarray (m,): vector containing the gradients of the binary cross-entropy loss 
+            between each `y_pred` and `y_true`.
         """
-        pass
+
+        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        return - (y_true / y_pred) + (1 - y_true) / (1 - y_pred)
 
 class CategorialCrossEntropy(Loss):
     """Categorical cross-entropy loss function.
@@ -81,5 +125,9 @@ class CategorialCrossEntropy(Loss):
         Args:
             y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
             y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+
+        Returns:
+            np.ndarray (m,): vector containing the gradients of the categorical cross-entropy loss 
+            between each `y_pred` and `y_true`.
         """
         pass
