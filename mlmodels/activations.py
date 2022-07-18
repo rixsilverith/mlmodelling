@@ -61,3 +61,31 @@ class Softmax(Activation):
 
     def gradient(self, x):
         pass
+
+class ReLU(Activation):
+    """Rectified Linear Unit (ReLU) activation function. """
+
+    def __call__(self, x: np.ndarray) -> np.ndarray:
+        """Compute the ReLU activation for the given vector.
+
+        Args:
+            x (np.ndarray (n,)): input vector to which the ReLU activation is applied.
+
+        Returns:
+            np.ndarray (n,): ReLU activation of the input vector `x`.
+        """
+
+        return np.where(x >= 0, x, 0)
+
+    def gradient(self, x: np.ndarray) -> np.ndarray:
+        """Compute the gradient of the ReLU activation for the given vector.
+
+        Args:
+            x (np.ndarray (n,)): input vector to which the ReLU activation is applied.
+
+        Returns:
+            np.ndarray (n,): gradients of the ReLU activation of the input vector `x`.
+        """
+
+        return np.where(x >= 0, 1, 0)
+    
