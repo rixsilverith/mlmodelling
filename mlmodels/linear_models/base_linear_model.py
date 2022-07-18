@@ -1,11 +1,12 @@
-"""Base linear model module.
+"""Base linear model module
 
 This module implements an abstraction for a generalized linear model from which inherits
 the linear regression model and its variants, as well as logistic regression.
 """
 
 import math
-from abc import ABC
+from typings import Self
+
 import numpy as np
 from terminaltables import AsciiTable
 
@@ -15,15 +16,15 @@ from mlmodels.losses import Loss
 from mlmodels.activations import Activation
 from mlmodels.regularizers import Regularizer
 
-class LinearModel(ABC):
+class LinearModel(BaseModel):
     """Base class to implement generalized linear models.
 
     Attributes:
         phi (Activation): base function of the generalized linear model.
     """
-    
-    def __init__(self, phi: Activation, optimizer: GradientBasedOptimizer, loss: Loss, 
-        regularizer=Regularizer):
+
+    def __init__(self, phi: Activation, optimizer: GradientBasedOptimizer, loss: Loss,
+        regularizer: Regularizer):
         """Initialize a `LinearModel` instance.
 
         Args:
@@ -41,7 +42,7 @@ class LinearModel(ABC):
         self.loss = loss
         self.regularizer = regularizer
 
-    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int=4000):
+    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000) -> Self:
         """Fit the linear model according to the provided training data.
         """
 
@@ -56,8 +57,13 @@ class LinearModel(ABC):
             grad_loss = X.T.dot(y_pred - y)
             self.coefficients = self.optimizer.update(self.coefficients, grad_loss)
 
+            if i % 100 == 99:
+                print(f'Epoch {i + 1}/{epochs} - loss {float(loss):.2f}')
+
+            '''
             if i % math.ceil(epochs / 10) == 0 or i == (epochs - 1):
                 print(f"Epoch {i + 1}/{epochs} - loss {float(loss):.2f}")
+            '''
 
         return self
 
@@ -68,10 +74,14 @@ class LinearModel(ABC):
         return self.phi(X.dot(self.coefficients))
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Name of linear model. """
+
         return type(self).__name__
 
     def summary(self):
+        """Print a summary containing model information. """
+
         print(AsciiTable([[f'{self.name}']]).table)
         print('phi (activation):', self.phi.name)
         print('optimizer:', self.optimizer.name)

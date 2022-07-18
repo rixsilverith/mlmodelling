@@ -1,4 +1,8 @@
-"""Activations module."""
+"""Activations module
+
+This module contains the implementation of several activation functions widely
+used in neural networks and in some generalized linear models.
+"""
 
 from abc import ABC, abstractmethod
 import numpy as np
@@ -18,14 +22,32 @@ class Activation(ABC):
     def name(self):
         return type(self).__name__
 
-class Softmax(Activation):
-    """Softmax activation function. 
+class Identity(Activation):
+    """Identity function."""
 
-    Softmax converts a vector of values to a probability distribution.
+    def __call__(self, x):
+        return x
+
+    def gradient(self, x):
+        return self.__call__(x)
+
+class Sigmoid(Activation):
+    """Sigmoid (or logistic) activation function."""
+
+    def __call__(self, x):
+        return 1 / (1 + np.exp(-x))
+
+    def gradient(self, x):
+        pass
+
+class Softmax(Activation):
+    """Softmax activation function.
+
+    Softmax converts a vector of values into a probability distribution.
     """
 
     def __call__(self, x):
-        """Convert a 
+        """Compute the softmax activation of the given vector.
 
         Args:
             x (np.ndarray (n,)): numpy array with n features.
@@ -39,21 +61,3 @@ class Softmax(Activation):
 
     def gradient(self, x):
         pass
-
-class Sigmoid(Activation):
-    """Sigmoid (or logistic) activation function."""
-
-    def __call__(self, x):
-        return 1 / (1 + np.exp(-x))
-
-    def gradient(self, x):
-        pass
-
-class Identity(Activation):
-    """Identity function."""
-
-    def __call__(self, x):
-        return x
-
-    def gradient(self, x):
-        return x

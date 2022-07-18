@@ -9,6 +9,6 @@ class Regularizer(ABC):
     def __call__(self, x):
         pass
 
-    @abstractmethod 
+    @abstractmethod
     def gradient(self, x):
         pass

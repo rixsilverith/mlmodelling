@@ -1,6 +1,6 @@
 """Regression linear models module.
 
-This module implements the linear regression model and variants, such as lasso and 
+This module implements the linear regression model and variants, such as lasso and
 Ridge regression.
 """
 
@@ -21,6 +21,6 @@ class LinearRegressor(LinearModel):
         regularization.gradient = lambda x: 0
         regularization.name = 'None'
 
-        super(LinearRegressor, self).__init__( 
+        super(LinearRegressor, self).__init__(
             phi=Identity(), optimizer=optimizer, loss=BinaryCrossentropy(), regularizer=regularization)
 

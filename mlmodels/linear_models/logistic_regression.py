@@ -18,7 +18,7 @@ class LogisticRegressionClassifier(LinearModel):
     Args:
         learning_rate (float): step length when using gradient descent for optimization.
     """
-    def __init__(self, optimizer: GradientBasedOptimizer=StochasticGradientDescent(), 
+    def __init__(self, optimizer: GradientBasedOptimizer=StochasticGradientDescent(),
         regularizer: Regularizer=None):
         """Constructor for `LogisticRegressionClassifier` class.
 
@@ -31,7 +31,7 @@ class LogisticRegressionClassifier(LinearModel):
             regularizer.gradient = lambda x: 0
             regularizer.name = 'None'
 
-        super(LogisticRegressionClassifier, self).__init__( 
+        super(LogisticRegressionClassifier, self).__init__(
             phi=Sigmoid(), optimizer=optimizer, loss=BinaryCrossentropy(), regularizer=regularizer)
 
     def predict_prob(self, X):
