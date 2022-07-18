@@ -5,7 +5,6 @@ the linear regression model and its variants, as well as logistic regression.
 """
 
 import math
-from typings import Self
 
 import numpy as np
 from terminaltables import AsciiTable
@@ -15,6 +14,7 @@ from mlmodels.optimizers import GradientBasedOptimizer
 from mlmodels.losses import Loss
 from mlmodels.activations import Activation
 from mlmodels.regularizers import Regularizer
+from mlmodels.utils import stringify_config
 
 class LinearModel(BaseModel):
     """Base class to implement generalized linear models.
@@ -42,7 +42,7 @@ class LinearModel(BaseModel):
         self.loss = loss
         self.regularizer = regularizer
 
-    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000) -> Self:
+    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000):
         """Fit the linear model according to the provided training data.
         """
 
@@ -53,7 +53,7 @@ class LinearModel(BaseModel):
 
         for i in range(epochs):
             y_pred = self.phi(X.dot(self.coefficients))
-            loss = self.loss(y_pred, y)
+            loss = np.mean(self.loss(y_pred, y))
             grad_loss = X.T.dot(y_pred - y)
             self.coefficients = self.optimizer.update(self.coefficients, grad_loss)
 
@@ -85,6 +85,7 @@ class LinearModel(BaseModel):
         print(AsciiTable([[f'{self.name}']]).table)
         print('phi (activation):', self.phi.name)
         print('optimizer:', self.optimizer.name)
-        print(' └──', self.optimizer.config)
+        print(' └──', stringify_config(self.optimizer.get_config()))
         print('loss:', self.loss.name)
         print('regularizer:', self.regularizer.name)
+        print(' └──', stringify_config(self.regularizer.get_config()))

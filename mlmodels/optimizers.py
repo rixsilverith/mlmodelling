@@ -9,6 +9,7 @@ References:
 """
 
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 import numpy as np
 
 class GradientBasedOptimizer(ABC):
@@ -70,6 +71,9 @@ class StochasticGradientDescent(GradientBasedOptimizer):
         if self.nesterov:
             return theta + self.momentum * self.delta_theta - self.learning_rate * grad_theta
         return theta + self.delta_theta
+
+    def get_config(self) -> Dict[str, Any]:
+        return { 'learning_rate': float(self.learning_rate), 'momentum': float(self.momentum), 'nesterov': bool(self.nesterov) }
 
     @property
     def config(self) -> str:

@@ -5,7 +5,7 @@ overfitting during model training.
 """
 
 from abc import ABC, abstractmethod
-from typings import Self, Dict
+from typing import Dict, Any
 import numpy as np
 
 class Regularizer(ABC):
@@ -20,7 +20,7 @@ class Regularizer(ABC):
         name (str): name of the regularizer.
     """
 
-    def __init__(self, alpha: float) -> Self:
+    def __init__(self, alpha: float):
         """Initialize a `Regularizer` class instance.
 
         Args:
