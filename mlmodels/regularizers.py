@@ -9,7 +9,7 @@ from typing import Dict, Any
 import numpy as np
 
 class Regularizer(ABC):
-    """Base class for a regularizer. 
+    """Base class for a regularizer.
 
     This regularization term is used to decrease model complexity and prevent the model
     coefficients from becoming too large by adding a penalty to this complexity to the
@@ -55,8 +55,8 @@ class Regularizer(ABC):
     def get_config(self) -> Dict[str, Any]:
         return { 'alpha': float(self.alpha) }
 
-class L1LassoRegularizer(Regularizer):
-    """l1 norm (Lasso) regularization term. Lasso stands for Least Absolute Shrinkage 
+class L1Lasso(Regularizer):
+    """l1 norm (Lasso) regularization term. Lasso stands for Least Absolute Shrinkage
     and Selection Operator.
 
     Attributes:
@@ -64,7 +64,7 @@ class L1LassoRegularizer(Regularizer):
     """
 
     def __init__(self, alpha: float = 0.01):
-        """Initialize a `L1LassoRegularizer` class instance.
+        """Initialize a `L1Lasso` class instance.
 
         Args:
             alpha (float, default=0.01): regularization factor (0 < alpha < 1).
@@ -78,7 +78,7 @@ class L1LassoRegularizer(Regularizer):
     def gradient(self, theta: np.ndarray) -> np.ndarray:
         return self.alpha * np.sign(theta)
 
-class L2RidgeRegularizer(Regularizer):
+class L2Ridge(Regularizer):
     """l2 norm (Ridge) regularization term, also known as Tikhonov regularization.
 
     Attributes:

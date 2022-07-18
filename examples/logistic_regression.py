@@ -15,8 +15,9 @@ def main():
     print("X_train:", X_train.shape, "y_train:", y_train.shape)
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
     
-    optim = StochasticGradientDescent(learning_rate=0.01, momentum=0.9)
+    optim = StochasticGradientDescent(learning_rate=0.01, momentum=0.9, nesterov=True)
     model = LogisticRegressionClassifier(optimizer=optim).fit(X_train, y_train)
+    model.summary()
     
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_pred, y_test)

@@ -29,7 +29,7 @@ class Identity(Activation):
         return x
 
     def gradient(self, x):
-        return self.__call__(x)
+        return x
 
 class Sigmoid(Activation):
     """Sigmoid (or logistic) activation function."""
@@ -88,4 +88,4 @@ class ReLU(Activation):
         """
 
         return np.where(x >= 0, 1, 0)
-    
+

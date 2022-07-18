@@ -60,11 +60,6 @@ class LinearModel(BaseModel):
             if i % 100 == 99:
                 print(f'Epoch {i + 1}/{epochs} - loss {float(loss):.2f}')
 
-            '''
-            if i % math.ceil(epochs / 10) == 0 or i == (epochs - 1):
-                print(f"Epoch {i + 1}/{epochs} - loss {float(loss):.2f}")
-            '''
-
         return self
 
     def predict(self, X: np.ndarray) -> np.ndarray:

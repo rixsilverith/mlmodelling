@@ -8,7 +8,7 @@ import numpy as np
 
 def stringify_config(config: Dict[str, Any]) -> str:
     """Convert a config object to a string. """
-    
+
     config_str: str = ""
     for key in config:
         config_str += f'{key}: {config[key]}, '

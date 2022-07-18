@@ -73,8 +73,5 @@ class StochasticGradientDescent(GradientBasedOptimizer):
         return theta + self.delta_theta
 
     def get_config(self) -> Dict[str, Any]:
-        return { 'learning_rate': float(self.learning_rate), 'momentum': float(self.momentum), 'nesterov': bool(self.nesterov) }
-
-    @property
-    def config(self) -> str:
-        return f"learning_rate: {self.learning_rate}, momentum: {self.momentum}, nesterov: {self.nesterov}"
+        return { 'learning_rate': float(self.learning_rate), 'momentum': float(self.momentum),
+                 'nesterov': bool(self.nesterov) }

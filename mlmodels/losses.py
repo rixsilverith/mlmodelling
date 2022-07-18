@@ -7,6 +7,8 @@ to compute errors during model training.
 from abc import ABC, abstractmethod
 import numpy as np
 
+from mlmodels.activations import Softmax
+
 class Loss(ABC):
     """Base class for a loss function."""
 
@@ -26,7 +28,7 @@ class SquareLoss(Loss):
     """Square loss function."""
 
     def __call__(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """Compute the square loss between the predicted response vector `y_pred` and the true 
+        """Compute the square loss between the predicted response vector `y_pred` and the true
         response vector `y_true`.
 
         Args:
@@ -40,7 +42,7 @@ class SquareLoss(Loss):
         return 0.5 * np.power((y_pred - y_true), 2)
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
-        """Compute the gradient of the square loss between the predicted response vector `y_pred` 
+        """Compute the gradient of the square loss between the predicted response vector `y_pred`
         and the true response vector `y_true`.
 
         Args:
@@ -48,7 +50,7 @@ class SquareLoss(Loss):
             y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
 
         Returns:
-            np.ndarray (m,): vector containing the gradients of the  square loss between each 
+            np.ndarray (m,): vector containing the gradients of the  square loss between each
             `y_pred` and `y_true`.
         """
 
@@ -87,7 +89,7 @@ class BinaryCrossEntropy(Loss):
             y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
 
         Returns:
-            np.ndarray (m,): vector containing the gradients of the binary cross-entropy loss 
+            np.ndarray (m,): vector containing the gradients of the binary cross-entropy loss
             between each `y_pred` and `y_true`.
         """
 
@@ -127,7 +129,7 @@ class CategorialCrossEntropy(Loss):
             y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
 
         Returns:
-            np.ndarray (m,): vector containing the gradients of the categorical cross-entropy loss 
+            np.ndarray (m,): vector containing the gradients of the categorical cross-entropy loss
             between each `y_pred` and `y_true`.
         """
         pass
