@@ -16,7 +16,7 @@ def main():
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
     
     optim = StochasticGradientDescent(learning_rate=0.01, momentum=0.9, nesterov=True)
-    model = LogisticRegressionClassifier(optimizer=optim).fit(X_train, y_train)
+    model = LogisticRegressionClassifier(optimizer=optim).fit(X_train, y_train, epochs = 6000)
     model.summary()
     
     y_pred = model.predict(X_test)
@@ -37,7 +37,7 @@ def main():
     plt.ylim([y_min, y_max])
 
     plt.suptitle('LogisticRegressionClassifier', fontsize=15)
-    plt.title(f'Accuracy score: {acc:.2f}', fontsize=12)
+    plt.title(f'Accuracy score: {float(acc):.2f}', fontsize=12)
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
     plt.legend(loc='upper right')

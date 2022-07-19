@@ -38,8 +38,11 @@ class SquareLoss(Loss):
         Returns:
             np.ndarray (m,): vector containing the square loss between each `y_pred` and `y_true`.
         """
-
-        return 0.5 * np.power((y_pred - y_true), 2)
+        
+        #print('square loss got y_pred shape', y_pred.shape)
+        #print('square loss got y_true shape', y_true.shape)
+    
+        return 0.5 * np.square(y_pred - y_true)
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
         """Compute the gradient of the square loss between the predicted response vector `y_pred`
