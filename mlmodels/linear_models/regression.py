@@ -1,6 +1,6 @@
-"""Regression linear models module.
+"""Regression linear models module
 
-This module implements the linear regression model and variants, such as lasso and
+This module implements the linear regression model and variants, such as Lasso and
 Ridge regression.
 """
 
@@ -11,15 +11,20 @@ import numpy as np
 from mlmodels.linear_models import LinearModel
 from mlmodels.optimizers import GradientBasedOptimizer, StochasticGradientDescent
 from mlmodels.activations import Identity
-from mlmodels.losses import SquareLoss
-from mlmodels.regularizers import L2Ridge
+from mlmodels.losses import SquaredLoss
+from mlmodels.regularizers import L2Ridge, L1Lasso
 from mlmodels.utils import normalize
 
 class LinearRegressor(LinearModel):
-    """A linear regressor without regularization. """
+    """Linear regression model with no regularization. 
+
+    For a regularized version of this model see the `RidgeRegressor` and `LassoRegressor`
+    models for L2 and L1 regularization, respectively, which also support polynomial 
+    features out of the box.
+    """
 
     def __init__(self, optimizer: GradientBasedOptimizer = StochasticGradientDescent()):
-        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquareLoss(),
+        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquaredLoss(),
             regularizer = L2Ridge(alpha = 0.))
 
 class PolynomialRegressor(LinearModel):
@@ -28,19 +33,9 @@ class PolynomialRegressor(LinearModel):
     def __init__(self, degree: int = 2, optimizer: GradientBasedOptimizer = StochasticGradientDescent()):
         self.degree = degree
 
-        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquareLoss(),
+        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquaredLoss(),
             regularizer = L2Ridge(alpha = 0.3))
 
-    '''
-    def _transform_polynomial_features(self, X: np.ndarray, degree: int) -> np.ndarray:
-        X_transform = np.ones((X.shape[1], 1)) # ()
-
-        for i in range(1, degree + 1):
-            X_transform = np.append(X_transform, np.power(X, i + 1).reshape(-1, 1), axis = 1)
-
-        return X_transform
-
-    '''
     def _transform_polynomial_features(self, X: np.ndarray, degree: int) -> np.ndarray:
         n_samples, n_features = np.shape(X)
 
@@ -59,12 +54,7 @@ class PolynomialRegressor(LinearModel):
         return X_new
 
     def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000):
-        print('X_train after polynomial features:', self._transform_polynomial_features(X, self.degree))
         X = normalize(self._transform_polynomial_features(X, self.degree))
-
-        print('X_train after normalization and polyfeatures:', X)
-        #print('trans X', X)
-        #print('trans X shape', X.shape)
         return super().fit(X, y, epochs)
 
     def predict(self, X: np.ndarray) -> np.ndarray:
@@ -73,3 +63,49 @@ class PolynomialRegressor(LinearModel):
 
     def get_config(self) -> Dict[str, Any]:
         return { 'degree': int(self.degree) } | super().get_config()
+
+class RidgeRegressor(LinearModel):
+    """Ridge regression model. 
+
+    This regressor performs OLS linear regression with L2 (Ridge) regularization. It also
+    support polynomial features.
+    """
+
+    def __init__(self, degree: int = 1, reg_factor: float = 0.01,
+        optimizer: GradientBasedOptimizer = StochasticGradientDescent()):
+        """Initialize a `RidgeRegressor` class instance. """
+
+        if degree <= 0:
+            raise ValueError(f'degree must be > 0. Got {degree}')
+
+        if reg_factor < 0:
+            raise ValueError(f'reg_factor must be >= 0. Got {reg_factor}')
+
+        self.degree = degree
+        self.reg_factor = reg_factor
+
+        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquaredLoss(),
+            regularizer = L2Ridge(alpha = self.reg_factor))
+
+class LassoRegressor(LinearModel):
+    """Lasso regression model. 
+
+    This regressor performs OLS linear regression with L1 (Lasso) regularization. It also
+    support polynomial features.
+    """
+
+    def __init__(self, degree: int = 1, reg_factor: float = 0.01,
+        optimizer: GradientBasedOptimizer = StochasticGradientDescent()):
+        """Initialize a `LassoRegressor` class instance. """
+
+        if degree <= 0:
+            raise ValueError(f'degree must be > 0. Got {degree}')
+
+        if reg_factor < 0:
+            raise ValueError(f'reg_factor must be >= 0. Got {reg_factor}')
+
+        self.degree = degree
+        self.reg_factor = reg_factor
+
+        super().__init__(phi = Identity(), optimizer = optimizer, loss = SquaredLoss(),
+            regularizer = L1Lasso(alpha = self.reg_factor))

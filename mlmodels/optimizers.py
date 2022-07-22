@@ -41,6 +41,7 @@ class StochasticGradientDescent(GradientBasedOptimizer):
             nesterov (bool, default=False): whether to apply Nesterov momentum. See
                 Sutskever et al., 2013.
         """
+
         self.learning_rate = learning_rate
         self.momentum = momentum
         self.nesterov = nesterov

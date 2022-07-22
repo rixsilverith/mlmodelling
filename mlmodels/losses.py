@@ -10,7 +10,7 @@ import numpy as np
 from mlmodels.activations import Softmax
 
 class Loss(ABC):
-    """Base class for a loss function."""
+    """Base class for a loss function. """
 
     @abstractmethod
     def __call__(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
@@ -24,24 +24,21 @@ class Loss(ABC):
     def name(self) -> str:
         return type(self).__name__
 
-class SquareLoss(Loss):
-    """Square loss function."""
+class SquaredLoss(Loss):
+    """Squared loss function. If a (m, 1) vector is given, the loss is computed element-wise. """
 
     def __call__(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
         """Compute the square loss between the predicted response vector `y_pred` and the true
         response vector `y_true`.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
 
         Returns:
-            np.ndarray (m,): vector containing the square loss between each `y_pred` and `y_true`.
+            np.ndarray (m, 1): vector containing the square loss between each `y_pred` and `y_true`.
         """
         
-        #print('square loss got y_pred shape', y_pred.shape)
-        #print('square loss got y_true shape', y_true.shape)
-    
         return 0.5 * np.square(y_pred - y_true)
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
@@ -49,11 +46,11 @@ class SquareLoss(Loss):
         and the true response vector `y_true`.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
 
         Returns:
-            np.ndarray (m,): vector containing the gradients of the  square loss between each
+            np.ndarray (m, 1): vector containing the gradients of the  square loss between each
             `y_pred` and `y_true`.
         """
 
@@ -72,14 +69,15 @@ class BinaryCrossEntropy(Loss):
         Clips each value in the given prediction vector to avoid division by 0.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
 
         Returns:
             np.ndarray (m,): binary cross-entropy loss between each `y_pred` and `y_true`.
         """
 
-        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        eps = 1e-15
+        y_pred = np.clip(y_pred, eps, 1 - eps)
         return - y_true * np.log(y_pred) - (1 - y_true) * np.log(1 - y_pred)
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:
@@ -88,19 +86,20 @@ class BinaryCrossEntropy(Loss):
         Clips each value in the given prediction vector to avoid division by 0.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
 
         Returns:
             np.ndarray (m,): vector containing the gradients of the binary cross-entropy loss
             between each `y_pred` and `y_true`.
         """
 
-        y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)
+        eps = 1e-15
+        y_pred = np.clip(y_pred, eps, 1 - eps)
         return - (y_true / y_pred) + (1 - y_true) / (1 - y_pred)
 
 class CategorialCrossEntropy(Loss):
-    """Categorical cross-entropy loss function.
+    """Categorical cross-entropy loss function. Sometimes referred to as the log-loss function.
 
     The categorical cross-entropy loss function is mainly used in multi-class classification
     problems.
@@ -111,8 +110,8 @@ class CategorialCrossEntropy(Loss):
         and the true response vector `y_true`.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
             from_logits (bool, default=False): whether to interpret the predicted response vector
                 as logits. If true, a softmax activation is applied to `y_pred` to obtain a
                 probability distribution.
@@ -128,8 +127,8 @@ class CategorialCrossEntropy(Loss):
         vector `y_pred` and the true response vector `y_true`.
 
         Args:
-            y_pred (np.ndarray (m,)): response vector containg m predicted values by a model.
-            y_true (np.ndarray (m,)): response vector containg the corresponding m true values.
+            y_pred (np.ndarray (m, 1)): response vector containg m predicted values by a model.
+            y_true (np.ndarray (m, 1)): response vector containg the corresponding m true values.
 
         Returns:
             np.ndarray (m,): vector containing the gradients of the categorical cross-entropy loss

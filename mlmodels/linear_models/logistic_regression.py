@@ -1,6 +1,7 @@
 """Logistic regression model module
 
-This module implements the logistic regression model for binary classification.
+This module implements the logistic and softmax regression models for binary and
+multi-class classification, respectively.
 """
 
 import numpy as np
@@ -12,17 +13,16 @@ from mlmodels.optimizers import GradientBasedOptimizer, StochasticGradientDescen
 from mlmodels.regularizers import Regularizer, L2Ridge
 
 class LogisticRegressionClassifier(LinearModel):
-    """A logistic regression classifier.
+    """A logistic regression classifier. """
 
-    Args:
-        learning_rate (float): step length when using gradient descent for optimization.
-    """
     def __init__(self, optimizer: GradientBasedOptimizer = StochasticGradientDescent(),
         regularizer: Regularizer = L2Ridge()):
-        """Constructor for `LogisticRegressionClassifier` class.
+        """Initialize a `LogisticRegressionClassifier` class instance.
 
         Args:
-            optimizer (GradientBasedOptimizer): optimization algorithm used to fit the model.
+            optimizer (GradientBasedOptimizer, default = StochasticGradientDescent): optimization method
+                used to fit the model to the data.
+            regularizer (Regularizer, default = L2Ridge): regularization term to be used.
         """
 
         super().__init__(phi = Sigmoid(), optimizer = optimizer, loss = BinaryCrossEntropy(),
@@ -30,9 +30,25 @@ class LogisticRegressionClassifier(LinearModel):
 
     def predict_prob(self, X):
         """Predict the probabilities of the feature vectors in `X` belonging to a class. """
+
         X = np.insert(X, 0, 1, axis=1)
         return self.phi(X.dot(self.coefficients))
 
     def predict(self, X):
         """Predict a response vector given feature vectors in `X`. """
+
         return np.round(self.predict_prob(X))
+
+class SoftmaxClassifier(LinearModel):
+    """Softmax regression classifier. Also known as multinomial logistic regression.
+
+    This is a generalization of the `LogisticRegressionClassifier` to multi-class classification
+    problems. 
+    """
+
+    def __init__(self, optimizer: GradientBasedOptimizer = StochasticGradientDescent(),
+        regularizer: Regularizer = L2Ridge()):
+        """Initialize a `SoftmaxClassifier` class instance. """
+
+        super().__init__(phi = Softmax(), optimizer = optimizer, loss = CategorialCrossEntropy(),
+            regularizer = regularizer)

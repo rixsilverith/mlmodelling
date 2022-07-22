@@ -89,11 +89,6 @@ class L2Ridge(Regularizer):
         self.alpha = alpha
 
     def __call__(self, theta: np.ndarray) -> float:
-        #print('l2ridge received theta vector shape', theta.shape)
-        #print('l2 norm', theta.T.dot(theta).shape)
-        #print('theta.T', theta.T)
-        #print('theta', theta)
-        #print('l2 norm value', theta.T.dot(theta))
         return self.alpha * 0.5 * theta.T.dot(theta)
 
     def gradient(self, theta: np.ndarray) -> np.ndarray:

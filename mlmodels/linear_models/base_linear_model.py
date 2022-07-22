@@ -5,7 +5,6 @@ the linear regression model and its variants, as well as logistic regression.
 """
 
 import math
-
 import numpy as np
 from terminaltables import AsciiTable
 
@@ -43,51 +42,21 @@ class LinearModel(BaseModel):
         self.regularizer = regularizer
 
     def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000):
-        """Fit the linear model according to the provided training data.
-        """
+        """Fit the linear model according to the provided training data. """
 
         X = np.insert(X, 0, 1, axis=1)
         y = y.reshape(-1, 1)
 
-        print("X (in fit) shape", X.shape)
-        print("X used to fit:", X)
-
-        print("y (in fit) shape", y.shape)
-
         n_instances, n_features = X.shape
         bound = 1 / math.sqrt(n_features)
         self.coefficients = np.random.uniform(-bound, bound, (n_features, 1))
-        #print('initial coefficients:', self.coefficients)
-        print("coefficients shape:", self.coefficients.shape)
 
         for i in range(epochs):
-            y_pred = self.phi(X.dot(self.coefficients).reshape(-1, 1))
-
-            #print('linear model predicted with shape', y_pred.shape)
-            #print(y_pred)
-            #print('linear model actual values for given input with shape', y.shape)
-            #print(y)
-
-            #print('y_pred shape', y_pred.shape)
-            #print('y shape', y.shape)
-
-            #print(f'epoch {i + 1}, coefficients: {self.coefficients}')
-            
-            #print('loss shape', self.loss(y_pred, y).shape)
-            #print('regularization term:', float(self.regularizer(self.coefficients)))
-
-            #print('loss vector', self.loss(y_pred, y))
+            y_pred = self.phi(X.dot(self.coefficients))
 
             loss = np.mean(self.loss(y_pred, y) + self.regularizer(self.coefficients) / n_instances)
-            print(f"epoch {i + 1} loss {float(loss)} regularization {self.regularizer(self.coefficients) / n_instances}")
-            #print('X.T shape', X.T.shape)
-            #print('X0 - y vector shape', (y_pred - y).shape)
             grad_loss = X.T.dot(y_pred - y) + self.regularizer.gradient(self.coefficients).reshape(-1, 1) / n_instances
-            #print("grad loss shape", grad_loss.shape)
-            #print("regularized grad loss shape", self.regularizer.gradient(self.coefficients).reshape(-1, 1).shape)
-            #print('coefficients before update:', self.coefficients)
             self.coefficients = self.optimizer.update(self.coefficients, grad_loss)
-            #print('coefficients after update:', self.coefficients)
 
             if i % 100 == 99:
                 print(f'Epoch {i + 1}/{epochs} - loss {float(loss):.2f}')
@@ -95,7 +64,7 @@ class LinearModel(BaseModel):
         return self
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        """Predict using the linear model."""
+        """Predict using the linear model. """
 
         X = np.insert(X, 0, 1, axis=1)
         return self.phi(X.dot(self.coefficients))
