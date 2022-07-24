@@ -15,15 +15,12 @@ def main():
     print("X_train:", X_train.shape, "y_train:", y_train.shape)
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
     
-    model = mlmodels.decision_trees.DecisionTreeClassifier(min_samples_split = 2, max_depth = 3)
-    model.fit(X_train, y_train)
+    model = mlmodels.decision_trees.DecisionTreeClassifier(criterion = 'entropy', min_samples_split = 2, max_depth = 3)
 
+    model.fit(X_train, y_train)
     model.summary()
-    #model.print_tree()
 
     y_pred = model.predict(X_test)
-    #print('y_pred shape', y_pred.shape)
-    #print('acc score:', mlmodels.utils.accuracy_score(y_pred, y_test))
     print(f'acc score: {np.mean(y_pred == y_test):.2f}')
 
 if __name__ == "__main__":

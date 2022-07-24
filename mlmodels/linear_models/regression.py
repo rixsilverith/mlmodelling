@@ -16,10 +16,10 @@ from mlmodels.regularizers import L2Ridge, L1Lasso
 from mlmodels.utils import normalize
 
 class LinearRegressor(LinearModel):
-    """Linear regression model with no regularization. 
+    """Linear regression model with no regularization.
 
     For a regularized version of this model see the `RidgeRegressor` and `LassoRegressor`
-    models for L2 and L1 regularization, respectively, which also support polynomial 
+    models for L2 and L1 regularization, respectively, which also support polynomial
     features out of the box.
     """
 
@@ -43,12 +43,12 @@ class PolynomialRegressor(LinearModel):
             combs = [combinations_with_replacement(range(n_features), i) for i in range(0, degree + 1)]
             flat_combs = [item for sublist in combs for item in sublist]
             return flat_combs
-    
+
         combinations = index_combinations()
         n_output_features = len(combinations)
         X_new = np.empty((n_samples, n_output_features))
-    
-        for i, index_combs in enumerate(combinations):  
+
+        for i, index_combs in enumerate(combinations):
             X_new[:, i] = np.prod(X[:, index_combs], axis=1)
 
         return X_new
@@ -65,7 +65,7 @@ class PolynomialRegressor(LinearModel):
         return { 'degree': int(self.degree) } | super().get_config()
 
 class RidgeRegressor(LinearModel):
-    """Ridge regression model. 
+    """Ridge regression model.
 
     This regressor performs OLS linear regression with L2 (Ridge) regularization. It also
     support polynomial features.
@@ -88,7 +88,7 @@ class RidgeRegressor(LinearModel):
             regularizer = L2Ridge(alpha = self.reg_factor))
 
 class LassoRegressor(LinearModel):
-    """Lasso regression model. 
+    """Lasso regression model.
 
     This regressor performs OLS linear regression with L1 (Lasso) regularization. It also
     support polynomial features.

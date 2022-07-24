@@ -38,7 +38,7 @@ class SquaredLoss(Loss):
         Returns:
             np.ndarray (m, 1): vector containing the square loss between each `y_pred` and `y_true`.
         """
-        
+
         return 0.5 * np.square(y_pred - y_true)
 
     def gradient(self, y_pred: np.ndarray, y_true: np.ndarray) -> np.ndarray:

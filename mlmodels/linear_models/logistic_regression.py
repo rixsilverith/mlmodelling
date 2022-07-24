@@ -43,7 +43,7 @@ class SoftmaxClassifier(LinearModel):
     """Softmax regression classifier. Also known as multinomial logistic regression.
 
     This is a generalization of the `LogisticRegressionClassifier` to multi-class classification
-    problems. 
+    problems.
     """
 
     def __init__(self, optimizer: GradientBasedOptimizer = StochasticGradientDescent(),

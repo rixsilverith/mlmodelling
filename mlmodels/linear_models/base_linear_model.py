@@ -4,26 +4,27 @@ This module implements an abstraction for a generalized linear model from which 
 the linear regression model and its variants, as well as logistic regression.
 """
 
+from __future__ import annotations
+from typing import Dict, Any
+from abc import ABC
 import math
 import numpy as np
-from terminaltables import AsciiTable
 
 from mlmodels import BaseModel
 from mlmodels.optimizers import GradientBasedOptimizer
 from mlmodels.losses import Loss
 from mlmodels.activations import Activation
 from mlmodels.regularizers import Regularizer
-from mlmodels.utils import stringify_config
 
-class LinearModel(BaseModel):
+class LinearModel(BaseModel, ABC):
     """Base class to implement generalized linear models.
 
     Attributes:
         phi (Activation): base function of the generalized linear model.
     """
 
-    def __init__(self, phi: Activation, optimizer: GradientBasedOptimizer, loss: Loss,
-        regularizer: Regularizer):
+    def __init__(self: Self, phi: Activation, optimizer: GradientBasedOptimizer, loss: Loss,
+        regularizer: Regularizer) -> Self:
         """Initialize a `LinearModel` instance.
 
         Args:
@@ -41,7 +42,7 @@ class LinearModel(BaseModel):
         self.loss = loss
         self.regularizer = regularizer
 
-    def fit(self, X: np.ndarray, y: np.ndarray, epochs: int = 3000):
+    def fit(self: Self, X: np.ndarray, y: np.ndarray, epochs: int = 3000) -> Self:
         """Fit the linear model according to the provided training data. """
 
         X = np.insert(X, 0, 1, axis=1)
@@ -63,25 +64,16 @@ class LinearModel(BaseModel):
 
         return self
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
+    def predict(self: Self, X: np.ndarray) -> np.ndarray:
         """Predict using the linear model. """
 
         X = np.insert(X, 0, 1, axis=1)
         return self.phi(X.dot(self.coefficients))
 
-    @property
-    def name(self) -> str:
-        """Name of linear model. """
+    def get_config(self: Self) -> Dict[str, Any]:
+        """Get the configuration of the linear model. """
 
-        return type(self).__name__
-
-    def summary(self):
-        """Print a summary containing model information. """
-
-        print(AsciiTable([[f'{self.name}']]).table)
-        print('phi (activation):', self.phi.name)
-        print('optimizer:', self.optimizer.name)
-        print(' └──', stringify_config(self.optimizer.get_config()))
-        print('loss:', self.loss.name)
-        print('regularizer:', self.regularizer.name)
-        print(' └──', stringify_config(self.regularizer.get_config()))
+        return { 'phi (activation)': self.phi.name,
+            'optimizer': { 'name': self.optimizer.name } | self.optimizer.get_config(),
+            'loss': self.loss.name,
+            'regularizer': { 'name': self.regularizer.name } | self.regularizer.get_config() }

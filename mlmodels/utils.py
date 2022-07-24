@@ -7,13 +7,23 @@ from typing import Dict, Any
 import numpy as np
 
 def stringify_config(config: Dict[str, Any]) -> str:
-    """Convert a config object to a string. """
+    """Convert a model configuration dictionary into a string. """
 
     config_str: str = ""
     for key in config:
-        config_str += f'{key}: {config[key]}, '
+        if isinstance(config[key], dict):
+            subconfig = config[key]
+            if 'name' in subconfig:
+                itemname = subconfig['name']
+                del subconfig['name']
+            config_str += f'{key}: {itemname}\n └── '
+            for subkey in subconfig:
+                config_str += f'{subkey}: {subconfig[subkey]}, '
+            config_str = config_str[:len(config_str) - 2] + "\n"
+            continue
+        config_str += f'{key}: {config[key]}\n'
 
-    return config_str[:len(config_str) - 2] # remove colon in the last config attribute
+    return config_str
 
 def accuracy_score(y_pred, y_true):
     return np.mean(y_pred == y_true.reshape(-1, 1))
