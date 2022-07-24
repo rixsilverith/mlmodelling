@@ -16,14 +16,22 @@ def stringify_config(config: Dict[str, Any]) -> str:
     return config_str[:len(config_str) - 2] # remove colon in the last config attribute
 
 def accuracy_score(y_pred, y_true):
-    return np.mean(y_pred == y_true.reshape(-1, 1), axis = 0)
+    return np.mean(y_pred == y_true.reshape(-1, 1))
+
+def entropy(y: np.ndarray) -> float:
+    """Compute the entropy of the input vector `y`. """
+
+    entropy = 0
+    for cls in np.unique(y):
+        cls_proportion = len(y[y == cls]) / len(y)
+        entropy += - cls_proportion * np.log2(cls_proportion)
+    return entropy
 
 def normalize(X, axis=-1, order=2):
     """ Normalize the dataset X. """
     l2 = np.atleast_1d(np.linalg.norm(X, order, axis))
     l2[l2 == 0] = 1
     return X / np.expand_dims(l2, axis)
-
 
 def standardize(X):
     """ Standardize the dataset X. """

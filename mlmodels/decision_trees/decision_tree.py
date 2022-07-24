@@ -1,24 +1,18 @@
 """Decision tree module
 
-This module implements the decision tree model.
+This module implements the CART (Classification and Regression Tree) model for
+decision trees. `DecisionTree` is an abstraction from which inherit the concrete
+`DecisionTreeClassifier` and `DecisionTreeRegressor` models.
 """
 
+from __future__ import annotations
 import math
 from abc import ABC
 import numpy as np
 from terminaltables import AsciiTable
 
 from mlmodels import BaseModel
-
-def entropy(y):
-    log2 = lambda x: math.log(x) / math.log(2)
-    unique_labels = np.unique(y)
-    entropy = 0
-    for label in unique_labels:
-        count = len(y[y == label])
-        p = count / len(y)
-        entropy += -p * log2(p)
-    return entropy
+from mlmodels.utils import entropy
 
 class DecisionTreeNode():
     """Node of a decision tree. 
@@ -34,23 +28,28 @@ class DecisionTreeNode():
     it corresponds to the predicted value for a given sample).
     """
 
-    def __init__(self, feature_index: int = None, threshold: float = None, value: float = None, 
-        true_branch = None, false_branch = None):
+    def __init__(self: Self, feature_index: int = None, threshold: float = None, value: float = None, 
+        true_branch = None, false_branch = None) -> Self:
         """Initialize a `DecisionTreeNode` class instance.
     
         Args:
-            feature_index (int):
-            threshold (float):
-            value (float):
-            true_branch (DecisionTreeNode):
-            false_branch (DecisionTreeNode):
+            feature_index (int): index in a feature vector of the feature on which condition
+                is evaluated.
+            threshold (float): corresponding value of the feature at `feature_index` on which
+                the condition is evaluated.
+            value (float): class/category (classification) or response value (regression) of 
+                the sample that arrives at this node takes. 
+            true_branch (DecisionTreeNode): subtree containing the elements in the dataset that
+                fulfills the condition in the node.
+            false_branch (DecisionTreeNode): subtree containing the elements in the dataset 
+                that don't fulfill the condition in the node.
         """
 
-        self.feature_index = feature_index
-        self.threshold = threshold
-        self.value = value
-        self.true_branch = true_branch
-        self.false_branch = false_branch
+        self.feature_index: int = feature_index
+        self.threshold: float = threshold
+        self.value: float = value
+        self.true_branch: Self = true_branch
+        self.false_branch: Self = false_branch
 
 class DecisionTree(BaseModel, ABC):
     """Decision tree abstract model.
@@ -70,6 +69,7 @@ class DecisionTree(BaseModel, ABC):
             max_depth (int): maximum depth of the decision tree. If None, nodes are expanded either
                 until all leaves are pure or until all leaves contain less than min_samples_split 
                 samples.
+            min_impurity_decrease (float):
         """
 
         self.root: DecisionTreeNode = None
@@ -113,44 +113,7 @@ class DecisionTree(BaseModel, ABC):
         X_true = np.array([sample for sample in X if sample[feature_i] >= threshold])
         X_false = np.array([sample for sample in X if sample[feature_i] < threshold])
 
-        return [X_true, X_false]
-
-        '''
-        left_index = np.argwhere(X <= threshold).flatten()
-        right_index = np.argwhere(X > threshold).flatten()
-        return left_index, right_index
-        '''
-
-    def _compute_information_gain(self, X, y, threshold):
-        """Compute the information gain of splitting the node on a given feature. """
-
-        '''
-        parent_loss = self._compute_entropy(y)
-        left_index, right_index = self._split_on_feature(X, threshold)
-        n, n_left, n_right = len(y), len(left_index), len(right_index)
-
-        if n_left == 0 or n_right == 0:
-            return 0
-
-        child_loss = (n_left / n) * self._compute_entropy(y[left_index]) + (n_right / n) * self._compute_entropy(y[right_index])
-        return parent_loss - child_loss
-        '''
-
-    '''
-    def _best_split(self, X, y, features):
-        split = {'score': -1, 'feat': None, 'threshold': None}
-        for feat in features:
-            X_feat = X[:, feat]
-            thresholds = np.unique(X_feat)
-            for thresh in thresholds:
-                score = self._compute_information_gain(X_feat, y, thresh)
-                if score > split['score']:
-                    split['score'] = score
-                    split['feat'] = feat
-                    split['threshold'] = thresh
-
-        return split['feat'], split['threshold']
-    '''
+        return X_true, X_false
 
     def _compute_best_split(self, X, y):
         """Compute the best possible dataset split; i.e. the split that minimizes impurity. """
@@ -181,7 +144,6 @@ class DecisionTree(BaseModel, ABC):
                         best_split['y_false'] = y_false
                         best_split['impurity'] = impurity
 
-        #print(best_split)
         return best_split
 
 
@@ -189,10 +151,7 @@ class DecisionTree(BaseModel, ABC):
         """Recursively build the decision tree and split the feature matrix X and the response 
         vector `y` on the feature of `X` which best separates the dataset. """
 
-        Xy = np.concatenate((X, y.reshape(-1, 1)), axis=1) # concat X and y to easily perform data split
-        n_samples, n_features = X.shape
-        n_classes = len(np.unique(y))
-
+        n_samples = X.shape[0]
         self.depth = current_depth
 
         max_impurity = 0
@@ -205,32 +164,6 @@ class DecisionTree(BaseModel, ABC):
                 if imp > max_impurity:
                     max_impurity = imp
 
-            '''
-            # Compute the impurity (Gini index or information gain) for each feature
-            for feature_i in range(n_features):
-                feature_values = X[:, feature_i].reshape(-1, 1)
-
-                for threshold in np.unique(feature_values):
-                    # For each feature_i split the datsset depending if the feature value of X at
-                    # index feature_i meets the threshold
-                    Xy1, Xy2 = self._split_on_feature(Xy, feature_i, threshold)
-
-                    if len(Xy1) > 0 and len(Xy2) > 0:
-                        y_left = Xy1[:, n_features:]
-                        y_right = Xy2[:, n_features:]
-
-                        impurity = self.impurity_criterion(y, y_left, y_right)
-                        if impurity > max_impurity:
-                            max_impurity = impurity
-                            best_criteria = { 'feature_i': feature_i, 'threshold': threshold }
-                            best_sets = {
-                                'leftX': Xy1[:, :n_features],
-                                'lefty': Xy1[:, n_features:],
-                                'rightX': Xy2[:, :n_features],
-                                'righty': Xy2[:, n_features:]
-                            }
-            '''
-
         if max_impurity > self.min_impurity_decrease:
             true_branch = self._build_tree(best_split['X_true'], best_split['y_true'], current_depth + 1)
             false_branch = self._build_tree(best_split['X_false'], best_split['y_false'], current_depth + 1)
@@ -240,18 +173,6 @@ class DecisionTree(BaseModel, ABC):
 
         leaf_value = self.leaf_value_criterion(y)
         return DecisionTreeNode(value = leaf_value)
-
-        """
-            random_feats = np.random.choice(n_features, n_features, replace=False)
-            best_feat, best_thresh = self._bset_split(X, y, random_feats)
-
-            left_index, right_index = self._split_on_feature(X[:, best_feat], best_thresh)
-            left_child = self._build_tree(X[left_index, :], y[left_index], current_depth + 1)
-            right_child = self._build_tree(X[right_index, :], y[right_index], current_depth + 1)
-
-        most_common_label = np.argmax(np.bincount(y))
-        return DecisionTreeNode(value=most_common_label)
-        """
 
     def predict_label(self, x, node = None):
         """Classify a single sample. """
@@ -305,11 +226,19 @@ class DecisionTreeRegressor(DecisionTree):
 
         value = np.mean(y, axis=0)
         return value if len(value) > 1 else value[0]
+
+    def fit(self: Self, X: np.ndarray, y: np.ndarray) -> Self:
+        """Fit the decision tree classifier according to the provided training data. """
+
+        self.impurity_criterion = self.variance_reduction
+        self.leaf_value_criterion = self.mean_y
+        super().fit(X, y)
     
 class DecisionTreeClassifier(DecisionTree):
     """Decision tree classifier model. """
 
-    def __init__(self, criterion: str = 'gini', min_samples_split: int = 2, max_depth: int = None, min_impurity_decrease: float = .0):
+    def __init__(self: Self, criterion: str = 'gini', min_samples_split: int = 2, max_depth: int = None, 
+        min_impurity_decrease: float = .0) -> Self:
         """Initialize a `DecisionTreeClassifier` class instance.
         """
 
@@ -318,34 +247,39 @@ class DecisionTreeClassifier(DecisionTree):
 
         self.criterion = criterion
 
-        super().__init__(min_samples_split = min_samples_split, max_depth = max_depth, min_impurity_decrease = min_impurity_decrease)
+        super().__init__(min_samples_split = min_samples_split, max_depth = max_depth, 
+            min_impurity_decrease = min_impurity_decrease)
 
-    def information_gain(self, y_node, y_true, y_false):
+    def gini_index(self: Self, y: np.ndarray) -> float:
+        """Compute the Gini index of the given vector `y`. """
+
+        gini = 0
+        for cls in np.unique(y):
+            cls_proportion = len(y[y == cls]) / len(y)
+            gini += cls_proportion ** 2
+        return 1 - gini
+
+    def information_gain(self: Self, y_node: np.ndarray, y_true: np.ndarray, y_false: np.ndarray) -> float:
         """Compute the information gain of the split of `y_node` into `y_true` and `y_false`. """
 
-        node_entropy = entropy(y_node)
         true_p = len(y_true) / len(y_node)
-        info_gain = node_entropy - true_p * entropy(y_true) - (1 - true_p) * entropy(y_false)
+        false_p = len(y_false) / len(y_node)
+        if self.criterion == 'gini': 
+            impurity_measure = self.gini_index
+        else: impurity_measure = entropy
 
-        return info_gain
+        return impurity_measure(y_node) - true_p * impurity_measure(y_true) \
+            - (1 - true_p) * impurity_measure(y_false)
 
-    def most_common_class(self, y: np.ndarray):
+    def most_common_class(self: Self, y: np.ndarray) -> float:
         """Compute the most common class in the response vector `y`. """
 
-        max_count = 0
-        for label in np.unique(y):
-            # Count number of occurences of samples with label
-            count = len(y[y == label])
-            if count > max_count:
-                most_common = label
-                max_count = count
-        return most_common
+        y = list(y) 
+        return max(y, key = y.count)
 
-    def fit(self, X, y):
+    def fit(self: Self, X: np.ndarray, y: np.ndarray) -> Self:
         """Fit the decision tree classifier according to the provided training data. """
 
         self.impurity_criterion = self.information_gain
         self.leaf_value_criterion = self.most_common_class
-
-        return super().fit(X, y)
-
+        super().fit(X, y)
