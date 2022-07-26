@@ -21,6 +21,12 @@ class LinearModel(BaseModel, ABC):
 
     Attributes:
         phi (Activation): base function of the generalized linear model.
+
+    References:
+        Glorot, X. & Bengio, Y. (2010). "Understanding the difficulty of training deep 
+            feedforward neural networks". In Y. W. Teh & M. Titterington (eds.), Proceedings 
+            of the Thirteenth International Conference on Artificial Intelligence and 
+            Statistics: pp. 249-256.
     """
 
     def __init__(self: Self, phi: Activation, optimizer: GradientBasedOptimizer, loss: Loss,
@@ -49,6 +55,7 @@ class LinearModel(BaseModel, ABC):
         y = y.reshape(-1, 1)
 
         n_instances, n_features = X.shape
+        # use Xavier initialization. See Glorot (2010).
         bound = 1 / math.sqrt(n_features)
         self.coefficients = np.random.uniform(-bound, bound, (n_features, 1))
 
