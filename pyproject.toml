@@ -1,0 +1,28 @@
+[project]
+name = "mlmodels"
+authors = [{ name = "Xav Silverith", email = "rixsilverith@outlook.com" }]
+description = "Implementations of classical machine learning models in Python"
+readme = "README.md"
+license = { file = "LICENSE" }
+dynamic = ["version"]
+requires-python = ">=3.7"
+urls = { repository = "https://github.com/rixsilverith/machine-learning-models" }
+dependencies = [
+    "numpy", "matplotlib",
+    "pyqt5", # needed as a GUI backend for matplotlib
+    "cvxopt", "scikit-learn", "terminaltables", "progressbar"
+]
+
+[project.optional-dependencies]
+dev = ['pytest']
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["mlmodels"]
+
+[tool.setuptools.dynamic]
+version = { attr = "mlmodels.__version__" }
+
