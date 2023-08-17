@@ -4,7 +4,7 @@ from sklearn.datasets import make_blobs
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-import mlmodels
+import mlmodelling
 
 def main():
     X, y = make_blobs(n_samples = 300, centers = 2, n_features = 2, cluster_std = 6, random_state = 11)
@@ -13,7 +13,7 @@ def main():
     print("X_train:", X_train.shape, "y_train:", y_train.shape)
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
 
-    model = mlmodels.neighbors.KNeighborsClassifier(k_neighbors = 151).fit(X_train, y_train)
+    model = mlmodelling.neighbors.KNeighborsClassifier(k_neighbors = 151).fit(X_train, y_train)
     model.summary()
 
     y_pred = model.predict(X_test)

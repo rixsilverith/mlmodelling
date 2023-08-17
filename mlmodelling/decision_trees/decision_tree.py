@@ -10,8 +10,8 @@ from typing import Dict, Any
 from abc import ABC
 import numpy as np
 
-from mlmodels import BaseModel
-from mlmodels.utils import entropy
+from mlmodelling import BaseModel
+from mlmodelling.utils import entropy
 
 class DecisionTreeNode():
     """Node of a decision tree.

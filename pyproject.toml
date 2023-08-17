@@ -1,12 +1,12 @@
 [project]
-name = "mlmodels"
+name = "mlmodelling"
 authors = [{ name = "Xav Silverith", email = "rixsilverith@outlook.com" }]
-description = "Implementations of classical machine learning models in Python"
+description = "Experimental machine learning library that provides readable yet efficient implementations of fundamental ML models, written using NumPy"
 readme = "README.md"
 license = { file = "LICENSE" }
 dynamic = ["version"]
 requires-python = ">=3.7"
-urls = { repository = "https://github.com/rixsilverith/machine-learning-models" }
+urls = { repository = "https://github.com/rixsilverith/mlmodelling" }
 dependencies = [
     "numpy", "matplotlib",
     "pyqt5", # needed as a GUI backend for matplotlib
@@ -21,8 +21,8 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["mlmodels"]
+packages = ["mlmodelling"]
 
 [tool.setuptools.dynamic]
-version = { attr = "mlmodels.__version__" }
+version = { attr = "mlmodelling.__version__" }
 

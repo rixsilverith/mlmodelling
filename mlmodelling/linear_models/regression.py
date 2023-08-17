@@ -8,12 +8,12 @@ from itertools import combinations_with_replacement
 from typing import Dict, Any
 import numpy as np
 
-from mlmodels.linear_models import LinearModel
-from mlmodels.optimizers import GradientBasedOptimizer, StochasticGradientDescent
-from mlmodels.activations import Identity
-from mlmodels.losses import SquaredLoss
-from mlmodels.regularizers import L2Ridge, L1Lasso
-from mlmodels.utils import normalize
+from mlmodelling.linear_models import LinearModel
+from mlmodelling.optimizers import GradientBasedOptimizer, StochasticGradientDescent
+from mlmodelling.activations import Identity
+from mlmodelling.losses import SquaredLoss
+from mlmodelling.regularizers import L2Ridge, L1Lasso
+from mlmodelling.utils import normalize
 
 class LinearRegressor(LinearModel):
     """Linear regression model with no regularization.

@@ -1,6 +1,6 @@
 """k-Nearest neighbors module.
 
-This module implements the k-nearest neighbors algorithm for classification. 
+This module implements the k-nearest neighbors algorithm for classification.
 """
 
 from __future__ import annotations
@@ -8,7 +8,7 @@ from typing import Dict, Any
 from abc import ABC
 import numpy as np
 
-from mlmodels import BaseModel
+from mlmodelling import BaseModel
 
 class KNearestNeighbors(BaseModel, ABC):
     """k-nearest neighbors algorithm.
@@ -23,7 +23,7 @@ class KNearestNeighbors(BaseModel, ABC):
         Args:
             k_neighbors (int): number of neighbors to be used in the algorithm.
         """
-    
+
         if k_neighbors < 1:
             raise ValueError(f'k_neighbors must be greater than 0. Got: {k_neighbors}')
         self.k_neighbors = k_neighbors

@@ -1,6 +1,6 @@
 """Random forest module
 
-This module implements an abstract `RandomForest` model, from which inherit the 
+This module implements an abstract `RandomForest` model, from which inherit the
 concrete `RandomForestClassifier` and `RandomForestRegressor` models.
 """
 
@@ -12,10 +12,10 @@ import numpy as np
 
 import progressbar
 
-from mlmodels import BaseModel
-from mlmodels.decision_trees import DecisionTree, DecisionTreeClassifier, DecisionTreeRegressor
+from mlmodelling import BaseModel
+from mlmodelling.decision_trees import DecisionTree, DecisionTreeClassifier, DecisionTreeRegressor
 
-progressbar_widgets = [ 'Fitting model: ', progressbar.Percentage(), ' ', progressbar.Bar(marker='-', 
+progressbar_widgets = [ 'Fitting model: ', progressbar.Percentage(), ' ', progressbar.Bar(marker='-',
     left='[', right=']'), ' ', progressbar.ETA() ]
 
 def random_subsets(X: np.ndarray, y: np.ndarray, n_subsets, replace = True):
@@ -37,10 +37,10 @@ def random_subsets(X: np.ndarray, y: np.ndarray, n_subsets, replace = True):
     return subsets
 
 class RandomForest(BaseModel, ABC):
-    """Random forest model. 
+    """Random forest model.
 
     References:
-        Hastie, T., Tibshirani, R.,, Friedman, J. (2009). 
+        Hastie, T., Tibshirani, R.,, Friedman, J. (2009).
             "The elements of statistical learning: data mining, inference and prediction". Springer.
         Breiman, L. (2001). "Random Forests". Machine learning, 45, 5--32. doi: 10.1023/A:1010933404324
     """
@@ -61,8 +61,8 @@ class RandomForest(BaseModel, ABC):
     def get_config(self: Self) -> Dict[str, Any]:
         """Get the configuration dictionary of the random forest. """
 
-        return { 'n_estimators': self.n_estimators, 'max_features': self.max_features, 
-            'min_samples_split': self.min_samples_split, 'max_depth': self.max_depth, 
+        return { 'n_estimators': self.n_estimators, 'max_features': self.max_features,
+            'min_samples_split': self.min_samples_split, 'max_depth': self.max_depth,
             'min_impurity_decrease': float(self.min_impurity_decrease)}
 
     def fit(self: Self, X: np.ndarray, y: np.ndarray) -> Self:
@@ -101,8 +101,8 @@ class RandomForestClassifier(RandomForest):
         min_samples_split: int = 2, max_depth: int = None, min_impurity_decrease: float = .0) -> Self:
         """Initialize a `RandomForestClassifier` class instance. """
 
-        super().__init__(n_estimators = n_estimators, max_features = max_features, 
-            min_samples_split = min_samples_split, max_depth = max_depth, 
+        super().__init__(n_estimators = n_estimators, max_features = max_features,
+            min_samples_split = min_samples_split, max_depth = max_depth,
             min_impurity_decrease = min_impurity_decrease)
 
         for _ in range(self.n_estimators):
@@ -118,8 +118,8 @@ class RandomForestRegressor(RandomForest):
         min_samples_split: int = 2, max_depth: int = None, min_impurity_decrease: float = .0) -> Self:
         """Initialize a `RandomForestRegressor` class instance. """
 
-        super().__init__(n_estimators = n_estimators, max_features = max_features, 
-            min_samples_split = min_samples_split, max_depth = max_depth, 
+        super().__init__(n_estimators = n_estimators, max_features = max_features,
+            min_samples_split = min_samples_split, max_depth = max_depth,
             min_impurity_decrease = min_impurity_decrease)
 
         for _ in range(self.n_estimators):

@@ -6,11 +6,11 @@ multi-class classification, respectively.
 
 import numpy as np
 
-from mlmodels.linear_models import LinearModel
-from mlmodels.losses import BinaryCrossEntropy
-from mlmodels.activations import Sigmoid
-from mlmodels.optimizers import GradientBasedOptimizer, StochasticGradientDescent
-from mlmodels.regularizers import Regularizer, L2Ridge
+from mlmodelling.linear_models import LinearModel
+from mlmodelling.losses import BinaryCrossEntropy
+from mlmodelling.activations import Sigmoid
+from mlmodelling.optimizers import GradientBasedOptimizer, StochasticGradientDescent
+from mlmodelling.regularizers import Regularizer, L2Ridge
 
 class LogisticRegressionClassifier(LinearModel):
     """A logistic regression classifier. """

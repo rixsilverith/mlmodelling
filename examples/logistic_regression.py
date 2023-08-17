@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 
-from mlmodels.linear_models import LogisticRegressionClassifier
-from mlmodels.optimizers import StochasticGradientDescent
-from mlmodels.utils import accuracy_score
+from mlmodelling.linear_models import LogisticRegressionClassifier
+from mlmodelling.optimizers import StochasticGradientDescent
+from mlmodelling.utils import accuracy_score
 
 def main():
     X, y = datasets.make_blobs(n_samples=1000, centers=2, n_features=2, cluster_std=3, random_state=1)
@@ -14,11 +14,11 @@ def main():
 
     print("X_train:", X_train.shape, "y_train:", y_train.shape)
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
-    
+
     optim = StochasticGradientDescent(learning_rate=0.01, momentum=0.9, nesterov=True)
     model = LogisticRegressionClassifier(optimizer=optim).fit(X_train, y_train, epochs = 6000)
     model.summary()
-    
+
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_pred, y_test)
 
@@ -41,7 +41,7 @@ def main():
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
     plt.legend(loc='upper right')
-    plt.show() 
+    plt.show()
 
 if __name__ == "__main__":
     main()

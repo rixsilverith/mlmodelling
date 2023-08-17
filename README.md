@@ -87,27 +87,27 @@ The following is a list of the currently implemented models.
 
 **Model** | **Implementation** | **Used for**
 --- | --- | ---
-Logistic Regression | [`LogisticRegressionClassifier`](mlmodels/linear_models/logistic_regression.py) | Binary classification
-Linear Regression | [`LinearRegressor`](mlmodels/linear_models/regression.py) | Regression
-Polynomial Regression | [`PolynomialRegressor`](mlmodels/linear_models/regression.py) | Regression
-Lasso (L1) Regression | [`LassoRegressor`](mlmodels/linear_models/regression.py) | Regression
-Ridge (L2) Regression | [`RidgeRegressor`](mlmodels/linear_models/regression.py) | Regression
+Logistic Regression | [`LogisticRegressionClassifier`](mlmodelling/linear_models/logistic_regression.py) | Binary classification
+Linear Regression | [`LinearRegressor`](mlmodelling/linear_models/regression.py) | Regression
+Polynomial Regression | [`PolynomialRegressor`](mlmodelling/linear_models/regression.py) | Regression
+Lasso (L1) Regression | [`LassoRegressor`](mlmodelling/linear_models/regression.py) | Regression
+Ridge (L2) Regression | [`RidgeRegressor`](mlmodelling/linear_models/regression.py) | Regression
 
 ### Tree-based models
 
 **Model** | **Implementation** | **Used for**
 --- | --- | ---
-Classification Decision Tree | [`DecisionTreeClassifier`](mlmodels/decision_trees/decision_tree.py) | Classification
-Regression Decision Tree | [`DecisionTreeRegressor`](mlmodels/decision_trees/decision_tree.py) | Regression
-Random Forest Classifier | [`RandomForestClassifier`](mlmodels/decision_trees/random_forest.py) | Classification
-Random Forest Regressor | [`RandomForestRegressor`](mlmodels/decision_trees/random_forest.py) | Regression
+Classification Decision Tree | [`DecisionTreeClassifier`](mlmodelling/decision_trees/decision_tree.py) | Classification
+Regression Decision Tree | [`DecisionTreeRegressor`](mlmodelling/decision_trees/decision_tree.py) | Regression
+Random Forest Classifier | [`RandomForestClassifier`](mlmodelling/decision_trees/random_forest.py) | Classification
+Random Forest Regressor | [`RandomForestRegressor`](mlmodelling/decision_trees/random_forest.py) | Regression
 
 ### Neighbor-based models
 
 **Model** | **Implementation** | **Used for**
 --- | --- | ---
-K-Nearest Neighbors Classifier | [`KNeighborsClassifier`](mlmodels/neighbors/k_nearest_neighbors.py) | Classification
-K-Nearest Neighbors Regressor | [`KNeighborsRegressor`](mlmodels/neighbors/k_nearest_neighbors.py) | Regression
+K-Nearest Neighbors Classifier | [`KNeighborsClassifier`](mlmodelling/neighbors/k_nearest_neighbors.py) | Classification
+K-Nearest Neighbors Regressor | [`KNeighborsRegressor`](mlmodelling/neighbors/k_nearest_neighbors.py) | Regression
 
 ---
 

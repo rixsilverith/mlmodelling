@@ -10,11 +10,11 @@ from abc import ABC
 import math
 import numpy as np
 
-from mlmodels import BaseModel
-from mlmodels.optimizers import GradientBasedOptimizer
-from mlmodels.losses import Loss
-from mlmodels.activations import Activation
-from mlmodels.regularizers import Regularizer
+from mlmodelling import BaseModel
+from mlmodelling.optimizers import GradientBasedOptimizer
+from mlmodelling.losses import Loss
+from mlmodelling.activations import Activation
+from mlmodelling.regularizers import Regularizer
 
 class LinearModel(BaseModel, ABC):
     """Base class to implement generalized linear models.
@@ -23,9 +23,9 @@ class LinearModel(BaseModel, ABC):
         phi (Activation): base function of the generalized linear model.
 
     References:
-        Glorot, X. & Bengio, Y. (2010). "Understanding the difficulty of training deep 
-            feedforward neural networks". In Y. W. Teh & M. Titterington (eds.), Proceedings 
-            of the Thirteenth International Conference on Artificial Intelligence and 
+        Glorot, X. & Bengio, Y. (2010). "Understanding the difficulty of training deep
+            feedforward neural networks". In Y. W. Teh & M. Titterington (eds.), Proceedings
+            of the Thirteenth International Conference on Artificial Intelligence and
             Statistics: pp. 249-256.
     """
 

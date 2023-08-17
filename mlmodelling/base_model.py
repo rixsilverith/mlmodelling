@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from terminaltables import AsciiTable
 import numpy as np
 
-from mlmodels.utils import stringify_config
+from mlmodelling.utils import stringify_config
 
 class BaseModel(ABC):
     """Base model. """

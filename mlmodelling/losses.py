@@ -7,7 +7,7 @@ to compute errors during model training.
 from abc import ABC, abstractmethod
 import numpy as np
 
-from mlmodels.activations import Softmax
+from .activations import Softmax
 
 class Loss(ABC):
     """Base class for a loss function. """

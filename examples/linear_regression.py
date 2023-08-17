@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_regression
 
-import mlmodels
+import mlmodelling
 
 def main():
     X, y = make_regression(n_samples = 100, n_features = 1, noise = 20, random_state = 42)
@@ -13,13 +13,13 @@ def main():
     print("X_train:", X_train.shape, "y_train:", y_train.shape)
     print("X_test:", X_test.shape, "y_test:", y_test.shape)
 
-    optim = mlmodels.optimizers.StochasticGradientDescent(learning_rate=0.01)
-    model = mlmodels.linear_models.LinearRegressor(optimizer=optim).fit(X_train, y_train, epochs=100)
+    optim = mlmodelling.optimizers.StochasticGradientDescent(learning_rate=0.01)
+    model = mlmodelling.linear_models.LinearRegressor(optimizer=optim).fit(X_train, y_train, epochs=100)
 
     model.summary()
 
     y_pred = model.predict(X_test)
-    mse = np.mean(mlmodels.losses.SquaredLoss()(y_pred, y_test))
+    mse = np.mean(mlmodelling.losses.SquaredLoss()(y_pred, y_test))
     print('Mean squared error: %s' % (mse))
 
     y_pred_line = model.predict(X)
