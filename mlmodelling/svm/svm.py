@@ -132,3 +132,49 @@ class BinarySVMClassifier(BaseSVM):
 
         return np.sign(self.decision_values(X, progress=progress))
 
+
+class SVMClassifier(BaseSVM):
+    """Multiclass Support Vector Machine classifier."""
+
+    classes_ = None
+    class_labels_ = None
+    coef_ = None  # (n_classes, n_features) (linear kernel)
+    _binary_svms: List[BinarySVMClassifier] | None = None
+
+    def __init__(self, C=1, kernel: BaseKernel = RBFKernel(gamma=0.5)):
+        super().__init__(C=C, kernel=kernel)
+
+    def _fit_binary_svm_for_class(self, X, y, label) -> BinarySVMClassifier:
+        own_class_indices = np.arange(len(y))[y == label]
+        rest_class_indices = np.arange(len(y))[y != label]
+
+        X_train_c = np.vstack((X[own_class_indices], X[rest_class_indices]))
+        y_own = np.ones(len(own_class_indices))
+        y_rest = np.ones(len(rest_class_indices)) * -1
+        y_train_c = np.hstack((y_own, y_rest))
+
+        return BinarySVMClassifier(
+                C=self.C_, kernel=self._kernel).fit(X_train_c, y_train_c)
+
+    def fit(self, X, y) -> 'SVMClassifier':
+        """Fit the SVM classifier given data (X, y)."""
+
+        _, n_features = np.shape(X)
+
+        self.classes_ = np.unique(y)
+        if self.class_labels_ is None:
+            self.class_labels_ = np.arange(len(self.classes_))
+
+        self._binary_svms = [self._fit_binary_svm_for_class(X, y, label)
+                             for label in self.classes_]
+        return self
+
+    def predict(self, X, progress: bool = True) -> np.ndarray:
+        """Perform classification on X."""
+
+        if self._binary_svms is None:
+            raise RuntimeError('the model has not been fitted')
+
+        y_pred = np.array([bsvm.predict(X, progress=progress) for bsvm in self._binary_svms]).T
+        return np.argmax(y_pred, axis=1)
+

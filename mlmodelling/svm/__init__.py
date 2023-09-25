@@ -1,1 +1,1 @@
-from .svm import BinarySVMClassifier
+from .svm import BinarySVMClassifier, SVMClassifier
